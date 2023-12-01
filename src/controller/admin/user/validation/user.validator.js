@@ -10,6 +10,11 @@ const { nameRule } = PEOPLE_VALIDATION_RULES;
 const userValidator = (req, res, next) => {
     // Joi validation
     const schema = Joi.object({
+        _id: Joi.string()
+            .allow(null)
+            .messages({
+                'string.base': 'Id must be a string.',
+            }),
         firstName: Joi.string()
             .min(nameRule.min.value)
             .max(nameRule.max.value)
