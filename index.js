@@ -9,6 +9,7 @@ const { ErrorHandler } = require('./src/handler');
 
 const app = express();
 const port = process.env.APP_PORT || 4000;
+app.use(express.static('public'))
 
 app.use(express.json());
 

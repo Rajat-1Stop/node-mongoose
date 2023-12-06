@@ -1,5 +1,6 @@
 const config = {
     APP_ENV: process.env.APP_ENV,
+    APP_URL: process.env.APP_URL,
     
     DB: {
         URL: process.env.DB_URL,
