@@ -70,7 +70,7 @@ brandSchema.pre('save', async function (next) {
 // Exclude some field from response
 brandSchema.methods.toJSON = function () {
     const brandObject = this.toObject();
-    delete APP_URLdeletedAt;
+    delete brandObject.deletedAt;
 
     brandObject.imageUrl = null;
     if(brandObject.image) {

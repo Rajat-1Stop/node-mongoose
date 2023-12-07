@@ -61,7 +61,6 @@ const deleteBrand = async (req, res, next) => {
         if (!brand) {
             throw new Error('Brand not found');
         }
-        console.log(brand);
         // Soft delete the brand
         brand.softDelete();
         ok(res, 'Brand deleted successfully');

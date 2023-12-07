@@ -5,5 +5,5 @@ const Product = require('./product');
 module.exports = {
     User,
     Brand,
-    Product
+    Product,
 }

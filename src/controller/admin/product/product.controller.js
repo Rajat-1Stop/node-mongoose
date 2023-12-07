@@ -6,15 +6,44 @@ const { Product } = require('../../../model');
 
 const getProducts = async (req, res, next) => {
     try {
-        const {page = 0, order = 'desc', orderBy = 'createdAt', rowsPerPage = 10} = req.body;
+        const { page = 0, order = 'desc', orderBy = 'createdAt', rowsPerPage = 10 } = req.body;
 
         const sortOrder = order === 'desc' ? -1 : 1;
         const sortBy = orderBy === 'createdAt' ? 'createdAt' : orderBy;
 
-        const products = await Product.find({})
-            .sort({ [sortBy]: sortOrder })
-            .limit(parseInt(rowsPerPage))
-            .skip(parseInt(rowsPerPage) * parseInt(page));
+        const products = await Product.aggregate([
+            {
+                $lookup: {
+                    from: 'brands',
+                    localField: 'brandId',
+                    foreignField: '_id',
+                    as: 'brand'
+                }
+            }, 
+            {
+                $match: {
+                    'brand.deletedAt': { $eq: null },
+                    'deletedAt': { $eq: null }
+                }
+            },
+            {
+                $addFields: {
+                    brand: { $arrayElemAt: ['$brand', 0] },
+                },
+            },
+            {
+                $sort: { [sortBy]: sortOrder },
+            },
+            {
+                $skip: parseInt(rowsPerPage) * (parseInt(page) - 1)
+            },
+            {
+                $limit: parseInt(rowsPerPage)
+            }
+        ]);
+
+        // The 'products' array will contain only those products where the referenced brand is not deleted
+
 
         ok(res, 'Products fetched successfully.', products);
         return;
@@ -63,6 +92,7 @@ const deleteProduct = async (req, res, next) => {
         }
 
         // Soft delete the product
+        product.softDelete();
         ok(res, 'Product deleted successfully');
         return;
     } catch (error) {
