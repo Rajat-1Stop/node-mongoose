@@ -1,4 +1,3 @@
-const bcrypt = require('bcrypt');
 const { ApiError, ok } = require('../../../handler');
 const { Product } = require('../../../model');
 
@@ -22,13 +21,20 @@ const getProducts = async (req, res, next) => {
             }, 
             {
                 $match: {
-                    'brand.deletedAt': { $eq: null },
-                    'deletedAt': { $eq: null }
+                    'brand.deletedAt': { $eq: null }
                 }
             },
             {
+                $lookup: {
+                    from: 'productInventories',
+                    localField: '_id',
+                    foreignField: 'productId',
+                    as: 'inventory'
+                }
+            },            
+            {
                 $addFields: {
-                    brand: { $arrayElemAt: ['$brand', 0] },
+                    brand: { $arrayElemAt: ['$brand', 0] }
                 },
             },
             {
