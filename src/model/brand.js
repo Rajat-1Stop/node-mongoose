@@ -1,8 +1,6 @@
 // models/brand.js
-const bcrypt = require('bcrypt');
 const mongoose = require('mongoose');
 const { getTime } = require('date-fns');
-const { ApiError } = require('../handler');
 const { APP_URL } = require('../config');
 const { uploadSingle } = require('../utils');
 

@@ -1,8 +1,5 @@
 // models/product.js
-const bcrypt = require('bcrypt');
 const mongoose = require('mongoose');
-// const { ApiError } = require('../handler');
-
 const { Schema } = mongoose;
 
 const productSchema = new mongoose.Schema({

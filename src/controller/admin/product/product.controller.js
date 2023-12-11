@@ -48,9 +48,6 @@ const getProducts = async (req, res, next) => {
             }
         ]);
 
-        // The 'products' array will contain only those products where the referenced brand is not deleted
-
-
         ok(res, 'Products fetched successfully.', products);
         return;
     } catch (error) {
